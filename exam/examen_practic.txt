@@ -1,0 +1,32 @@
+Să se scrie trei programe, în trei fișiere sursă (numite în felul următor: prg_P0.c, prg_P1.c și prg_P2.c) și care să colaboreze între ele conform specificațiilor următoare:
+Programul P0 va crea, în funcția sa main, două procese fii, iar în fiii creați va starta, prin apeluri exec adecvate, câte unul dintre celelalte două programe, P1 (în primul fiu creat) și respectiv P2 (în al doilea fiu creat). De asemenea, tot în funcția main a lui P0, mai puteți adăuga eventualele inițializări strict necesare pentru comunicațiile descrise în continuare.
+Funcționalitatea specifică a programului P0, pe care o veți implementa în (una sau două) funcții separate, apelate din funcția main a lui P0, constă în: P0 primește un parametru în linia de comandă, ce reprezintă calea către un fișier existent pe disc, numit "numere.txt". Acest fișier conține o secvență de numere întregi, în reprezentare "textuală" (adică, reprezentarea uzuală a întregilor folosită într-un fișier produs cu un editor text obișnuit). P0 va citi toate numerele din acest fișier "numere.txt" și le va transmite, după convertirea fiecăruia la reprezentarea sa "binară", către procesul P2, printr-un canal anonim.
+Funcționalitatea specifică a programului P2 constă în: citește din canalul anonim, rând pe rând, numerele transmise lui de către P0 și aplică {fără a stoca în memorie toată secvența citită} următoarea transformare asupra fiecărui număr citit : dacă este par, îl împarte la 2; apoi, dacă noul număr este multiplu de 3, îl împarte la 3; iar la final, dacă noul număr este multiplu de 5, îl împarte la 5. Fiecare număr astfel obținut este transmis mai departe către procesul P1, printr-un canal fifo, numit "fifo_P2toP1".
+Funcționalitatea specifică a programului P1 constă în: citește din acel canal fifo de la P2, rând pe rând, numerele transmise lui de către P2 și calculează {fără a stoca în memorie toată secvența citită} produsul fiecărei perechi de numere consecutive din secvența primită de la P1 (Notă: în cazul în care primește un număr impar de numere de la P1, considerați că a mai primit suplimentar la final încă un număr: elementul neutru la înmulțire). Apoi transmite produsele calculate către procesul P0, printr-un fișier numit "comm_P1toP0.bin", accesat fie direct pe disc (i.e., cu apeluri read/write, dar cu o penalizare de 1.5p), fie prin intermediul mapării sale în memorie (fără nicio penalizare), după cum doriți.
+Notă: de asemenea, în loc de fișier mapat în memorie, mai puteți alege să folosiți o mapare nepersistentă cu nume (nume creat cu apelul shm_open), tot fără nicio penalizare.
+Funcționalitatea specifică a programului P0, continuare: P0 citește secvența de numere scrise de către P1 în "comm_P1toP0.bin" (prin citire de pe disc, respectiv din memorie, conform manierei de acces la fișier pe care ați ales-o mai sus), și calculează minimul și  maximul acestor numere, afișându-le la final pe ecran.
+Recomandare:
+Mai întâi, desenați de mână pe o foaie de hârtie o schemă cu "arhitectura aplicației": ierarhia de procese, mijloacele de comunicație între procese și sensul de transmitere a informației prin aceste mijloace de comunicație (precum ați văzut în exemplele de diagrame realizate de mână, atașate la unele exerciții de laborator).
+Astfel vă veți clarifica mai bine cerințele specificate în enunțul problemei și, de asemenea, vă va ajuta la partea de implementare!
+Baremul de corectare (total 25p) - fiecare criteriu se acordă integral sau deloc:
+Criteriul minimal de îndeplinit: fiecare dintre cele trei fișiere sursă trebuie să se compileze fără erori (adică trebuie să producă un executabil, chiar și cu eventuale avertismente la compilare), pentru a fi luată în considerare spre corectare!
+Altfel, dacă vreunul dintre cele trei fișiere sursă NU se compilează fără erori, se vor acorda din oficiu 0p (zero!) pentru fiecare dintre cele 7 criterii, ce urmează mai jos, în care se face referire la procesul corespunzător acelui fișier sursă!
+
+1) Implementarea corectă a creării ierarhiei de procese și a apelurilor exec precizate, în funcția main din prg_P0.c : 4p
+2) Implementarea corectă a funcționalității cerute pentru P0 în (una sau două) funcții separate de main, în prg_P0.c : 3p
+3) Implementarea corectă a funcționalității cerute pentru P1, într-o sursă separată prg_P1.c : 2p
+4) Implementarea corectă a funcționalității cerute pentru P2, într-o sursă separată prg_P2.c : 2p
+
+5) Implementarea corectă a comunicației de la P0 către P2, prin canal anonim : 3p
+6) Implementarea corectă a comunicației de la P2 către P1, prin canal fifo : 3p
+7) Implementarea corectă a comunicației de la P1 către P0, prin fișier pe disc (respectiv mapare), inclusiv sincronizarea necesară: 1.5p (respectiv 3p)
+
+//Total MAXIM criteriile 1-7 = 20p
+
+Se va calcula fracția procentuală de îndeplinire a criteriilor de mai sus, iar cele 3 criterii de mai jos vor fi notate prin ponderare cu acest procentaj:  F = Total puncte acordate pentru criteriile 1-7 / 20p (i.e., total MAXIM criteriile 1-7)
+
+8) Tratarea cazurilor de eroare la TOATE apelurile de sistem din toate cele trei programe: F * 2p
+9) Scrierea codului într-o formă indentată, plăcută ochiului (i.e., "readable code"): F * 2p (de exemplu, evitați copy-paste în mcedit)
+10) Alegerea adecvată a identificatorilor folosiți drept nume pentru variabile și funcții: F * 1p (adică, numele lor să fie în corelație cu semnificația lor)
+
+//Total MAXIM criteriile 8-10 = 5p
